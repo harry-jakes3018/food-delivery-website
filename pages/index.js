@@ -1,10 +1,12 @@
 import Head from "next/head";
+import Hero from "../components/Hero";
 import Layout from "../components/Layout";
+import css from "../styles/Home.module.css";
 
 export default function Home() {
     return (
         <Layout>
-            <div>
+            <div className={css.container}>
                 <Head>
                     <title>FUDO</title>
                     <meta
@@ -16,7 +18,7 @@ export default function Home() {
 
                 {/* Body */}
                 <main>
-                    <h1>Hello</h1>
+                    <Hero />
                 </main>
             </div>
         </Layout>
