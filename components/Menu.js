@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { urlFor } from "../lib/client";
 import css from "../styles/Menu.module.css";
+import Link from "next/link";
 
 function Menu({ pizzas }) {
     // console.log(pizzas);
@@ -19,15 +20,18 @@ function Menu({ pizzas }) {
                     const src = urlFor(pizza.image).url();
                     return (
                         <div className={css.pizza} key={id}>
-                            <div className={css.imageWrapper}>
-                                <Image
-                                    loader={() => src}
-                                    src={src}
-                                    alt=""
-                                    objectFit="cover"
-                                    layout="fill"
-                                />
-                            </div>
+                            <Link href={`./pizza/${pizza.slug.current}`}>
+                                <div className={css.imageWrapper}>
+                                    <Image
+                                        loader={() => src}
+                                        src={src}
+                                        alt=""
+                                        objectFit="cover"
+                                        layout="fill"
+                                        unoptimized
+                                    />
+                                </div>
+                            </Link>
                             <span>{pizza.name}</span>
                             <span>
                                 <span style={{ color: "var(--themeRed" }}>
