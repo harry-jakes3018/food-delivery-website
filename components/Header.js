@@ -7,8 +7,8 @@ import { useStore } from "../store/store";
 
 function Header() {
     // State in terminal
-    const state = useStore((state) => state);
-    console.log(state);
+    // const state = useStore((state) => state);
+    // console.log(state);
 
     const items = useStore((state) => state.cart.pizzas.length);
 
