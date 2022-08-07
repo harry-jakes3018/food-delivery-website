@@ -4,10 +4,12 @@ import { createOrder } from "../lib/orderHandler";
 import { useStore } from "../store/store";
 import css from "../styles/OrderModal.module.css";
 import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/router";
 
 function OrderModal({ opened, setOpened, paymentMethod }) {
     const theme = useMantineTheme();
     const [formData, setFormData] = useState({});
+    const router = useRouter();
 
     const handleInput = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,6 +30,8 @@ function OrderModal({ opened, setOpened, paymentMethod }) {
         {
             typeof window !== "undefined" && localStorage.setItem("order", id);
         }
+
+        router.push(`/order/${id}`);
     };
 
     return (
