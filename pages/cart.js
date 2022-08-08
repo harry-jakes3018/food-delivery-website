@@ -6,12 +6,17 @@ import { urlFor } from "../lib/client";
 import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import OrderModal from "../components/OrderModal";
+import { useRouter } from "next/router";
 
 function Cart() {
     const cartData = useStore((state) => state.cart);
     const removePizza = useStore((state) => state.removePizza);
+    const router = useRouter();
 
     const [paymentMethod, setPaymentMethod] = useState(null);
+    const [order, setOrder] = useState(
+        typeof window !== "undefined" && localStorage.getItem("order")
+    );
 
     const handleRemove = (i) => {
         removePizza(i);
@@ -25,6 +30,26 @@ function Cart() {
     const handleOnDelivery = () => {
         setPaymentMethod(0);
         typeof window !== "undefined" && localStorage.setItem("total", total());
+    };
+
+    const handleCheckout = async () => {
+        typeof window !== "undefined" && localStorage.getItem("total", total());
+        setPaymentMethod(1);
+        const response = await fetch("/api/stripe", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(cartData.pizzas),
+        });
+
+        if (response.status === 500) {
+            return;
+        }
+
+        const data = await response.json();
+        toast.loading("Redirecting...");
+        router.push(data.url);
     };
 
     return (
@@ -114,12 +139,27 @@ function Cart() {
                         </div>
                     </div>
 
-                    <div className={css.buttons}>
-                        <button className="btn" onClick={handleOnDelivery}>
-                            Pay on Delivery
-                        </button>
-                        <button className="btn">Pay Now</button>
-                    </div>
+                    {!order && cartData.pizzas.length > 0 ? (
+                        <div className={css.buttons}>
+                            <button className="btn" onClick={handleOnDelivery}>
+                                Pay on Delivery
+                            </button>
+                            <button className="btn" onClick={handleCheckout}>
+                                Pay Now
+                            </button>
+                        </div>
+                    ) : (
+                        <div
+                            style={{
+                                fontWeight: "600",
+                                color: "var(--themeRed)",
+                                textAlign: "center",
+                            }}
+                        >
+                            Previous Order is already in process, so please try
+                            after it gets completed. Thank you.
+                        </div>
+                    )}
                 </div>
             </div>
 
