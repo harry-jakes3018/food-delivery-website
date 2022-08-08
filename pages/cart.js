@@ -149,16 +149,7 @@ function Cart() {
                             </button>
                         </div>
                     ) : (
-                        <div
-                            style={{
-                                fontWeight: "600",
-                                color: "var(--themeRed)",
-                                textAlign: "center",
-                            }}
-                        >
-                            Previous Order is already in process, so please try
-                            after it gets completed. Thank you.
-                        </div>
+                        null
                     )}
                 </div>
             </div>
